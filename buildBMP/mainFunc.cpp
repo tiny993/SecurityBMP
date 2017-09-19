@@ -29,12 +29,12 @@ int main()
 // 	free(tt);
 
 
-	myKey mykey;
+//	myKey mykey;
 //	mykey.set_key();
 // 	mykey.keyToNum(mykey.get_key());
  //	int flag = mykey.licOpeartion();
 // 	cout << flag << endl;
-	char* x = mykey.readKey();
+//	char* x = mykey.readKey();
 
 	return 0;
 }
