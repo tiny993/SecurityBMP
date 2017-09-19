@@ -1,0 +1,8 @@
+﻿#忽略Debug文件夹
+Debug
+#忽略vs项目资源文件
+*.sln
+*.db
+*.vcxproj
+*.filters
+*.opendb
