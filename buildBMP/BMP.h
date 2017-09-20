@@ -98,7 +98,6 @@ bool BMP::saveBmp(char *bmpName, unsigned char *imgBuf, int width, int height,
 	{
 		return 0;
 	}
-
 	//灰度图像颜色表大小为1024字节，彩色图像（默认）大小为0字节  
 	int colorTablesize = 0;
 	if (biBitCount == 8)

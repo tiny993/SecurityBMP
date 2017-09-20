@@ -7,3 +7,4 @@ Debug
 *.filters
 *.opendb
 x64
+.vs
