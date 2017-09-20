@@ -1,5 +1,6 @@
 #include "intArrBuild.h"
 #include "myKey.h"
+#include "BMP.h"
 
 int main()
 {
@@ -35,6 +36,17 @@ int main()
  //	int flag = mykey.licOpeartion();
 // 	cout << flag << endl;
 //	char* x = mykey.readKey();
-
+	BMP bmp;
+	//char* x = bmp.getFileName();
+	int** x = NULL;
+	if (bmp.packgeBMP(x))
+	{
+		cout << "ok" << endl;
+	}
+	else
+	{
+		cout << "fail" << endl;
+	}
+	
 	return 0;
 }

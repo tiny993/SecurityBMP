@@ -3,6 +3,8 @@
 *此文件不做任何实现
 *********************/
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
+
 #ifndef HEADLIB_H_
 #define HEADLIB_H_
 #endif // !HEADLIB_H_
@@ -20,5 +22,7 @@
 #include <tchar.h>
 #include <fstream>
 #include <io.h>
+#include <math.h>
+#include <iomanip>
 
 using namespace std;
