@@ -84,11 +84,11 @@ bool BMP::readBmp(char* bmpName)
 /**********************************
 *功能：将图像处理后存入指定文件中
 *参数：	bmpName：图像名称（字符串）
-*		imgBuf：读取的图像数据源（字符串）
-*		width：图像宽度（整形）
-*		height：图像高度（整形）
-*		biBitCount：像素字节数（整形）
-*		pColorTable：颜色表（RGBQUAD类型指针）
+*	imgBuf：读取的图像数据源（字符串）
+*	width：图像宽度（整形）
+*	height：图像高度（整形）
+*	biBitCount：像素字节数（整形）
+*	pColorTable：颜色表（RGBQUAD类型指针）
 *返回值：操作结果bool类型
 ***********************************/
 bool BMP::saveBmp(char *bmpName, unsigned char *imgBuf, int width, int height,
