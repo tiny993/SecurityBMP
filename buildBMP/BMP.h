@@ -195,7 +195,7 @@ bool BMP::packgeBMP(int** RGB_arr)
 	char* readPath = getFileName();
 	if (!readBmp(readPath))
 	{
-		cout << "\n********打开文件失败，请检查是否有"<<readPath<<"是否正确！********\n" << endl;
+		cout << "\n********打开文件失败，请检查是否有"<<readPath<<"文件！********\n" << endl;
 		return 0;
 	}
 
