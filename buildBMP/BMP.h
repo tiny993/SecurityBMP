@@ -199,6 +199,16 @@ bool BMP::packgeBMP(int** RGB_arr)
 	}
 
 	//完成文件打开，以下需要读取图片数据和改变像素值
+// 	if (biBitCount == 8)
+// 	{
+// 		for (int i = 0; i < bmpHeight/2; i++)
+// 		{
+// 			for (int j = 0; j < bmpWidth/2; j++)
+// 			{
+// 
+// 			}
+// 		}
+// 	}
 
 	return 1;
 }

@@ -1,6 +1,7 @@
 #include "intArrBuild.h"
 #include "myKey.h"
 #include "BMP.h"
+#include "Log.h"
 
 int main()
 {
@@ -38,15 +39,21 @@ int main()
 //	char* x = mykey.readKey();
 	BMP bmp;
 	//char* x = bmp.getFileName();
-	int** x = NULL;
-	if (bmp.packgeBMP(x))
-	{
-		cout << "ok" << endl;
-	}
-	else
-	{
-		cout << "fail" << endl;
-	}
-	
+
+// 	int** x = NULL;
+// 	if (bmp.packgeBMP(x))
+// 	{
+// 		cout << "ok" << endl;
+// 	}
+// 	else
+// 	{
+// 		cout << "fail" << endl;
+// 	}
+	Log log_t;
+	SYSTEMTIME sys = log_t.getTime();
+	printf("%4d年%02d月%02d日 %02d:%02d:%02d\n",
+		sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute,
+		sys.wSecond);
+//	log_t.writeLog("日志测试");
 	return 0;
 }

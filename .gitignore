@@ -8,3 +8,5 @@ Debug
 *.opendb
 x64
 .vs
+Log.txt
+Log

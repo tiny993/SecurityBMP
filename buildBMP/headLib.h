@@ -24,5 +24,6 @@
 #include <io.h>
 #include <math.h>
 #include <iomanip>
+#include <string>
 
 using namespace std;
