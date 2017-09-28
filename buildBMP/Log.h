@@ -4,6 +4,8 @@
 #endif // !LOG_H_
 
 #include "headLib.h"
+#include <direct.h>
+#include <io.h>
 
 class Log 
 {
@@ -14,8 +16,8 @@ public:
 	Log();
 	//获取当前时间
 	SYSTEMTIME getTime();
-	//创建Log文本
-	bool buildLog();
+	//创建Log文件夹
+	bool buildDir();
 	//将日志写入到文本中
 	bool writeLog(string log_str);
 };
@@ -42,16 +44,22 @@ SYSTEMTIME Log::getTime()
 ***********************************/
 bool Log::writeLog(string log_str)
 {
+	bool flag = buildDir();
+	if (!flag)
+	{
+		return false;
+	}
 	fstream file;
-	file.open(".\\Log.txt", ios::app);
+	file.open(".\\Log\\Log.txt", ios::app);
 	if (!file)
 	{
 		return false;
 	}
 	getTime();
-	string time_str = to_string(sys_time.wYear) + "年" + to_string(sys_time.wMonth) + "月" +
-		to_string(sys_time.wDay) + "日 " + to_string(sys_time.wHour) + ":" +
-		to_string(sys_time.wMinute) + ":" + to_string(sys_time.wSecond) + ":\n";
+	//打印当前时间
+	string time_str = to_string(sys_time.wYear) + "." + to_string(sys_time.wMonth) + "." +
+		to_string(sys_time.wDay) + " " + to_string(sys_time.wHour) + ":" +
+		to_string(sys_time.wMinute) + ":" + to_string(sys_time.wSecond) + "    ";
 	file << time_str;
 	file << log_str + "\n";
 	return true;
@@ -62,11 +70,15 @@ bool Log::writeLog(string log_str)
 *参数：无
 *返回值：操作结果
 ***********************************/
-bool Log::buildLog()
+bool Log::buildDir()
 {
-	fstream file;
-	file.open(".\\Log\\Log.txt", ios::app);
-	if (file)
+	//判断目录是否存在
+	int access_ret = access(".\\Log", 00);
+	if (access_ret == -1)
+	{
+		access_ret = mkdir(".\\Log");
+	}
+	if (access_ret == 0)
 	{
 		return true;
 	}

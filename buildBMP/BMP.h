@@ -1,6 +1,7 @@
 #pragma once
 #include "headLib.h"
 #include "IntArrBuild.h"
+#include "Log.h"
 
 class BMP : intArrBuild
 {
@@ -28,6 +29,7 @@ private:
 	RGBQUAD* pColorTable;
 	//每像素占用字节数
 	int biBitCount;
+	Log log_t;
 };
 BMP::BMP()
 {
@@ -175,11 +177,12 @@ char* BMP::getFileName()
 		ret = intArrBuild::stringBuild();
 		unsigned length = intArrBuild::getLength(ret);
 		//判断后缀是否为".bmp"
-		if (ret[length - 4] == '.' && ret[length - 3] == 'b' && ret[length - 2] == 'm' && ret[length - 1] == 'p' && length > 4)
+		if (length > 4 && ret[length - 4] == '.' && ret[length - 3] == 'b' && ret[length - 2] == 'm' && ret[length - 1] == 'p')
 		{
 			break;
 		}
 		cout << "\n********输入格式错误，请重新输入！********\n" << endl;
+		log_t.writeLog("输入图片名格式错误，请重新输入！");
 	}
 	return ret;
 }
@@ -195,6 +198,7 @@ bool BMP::packgeBMP(int** RGB_arr)
 	if (!readBmp(readPath))
 	{
 		cout << "\n********打开文件失败，请检查是否有"<<readPath<<"文件！********\n" << endl;
+		log_t.writeLog("打开文件失败，请检查是否有输入文件！");
 		return 0;
 	}
 

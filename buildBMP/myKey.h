@@ -4,6 +4,7 @@
 #endif // !MYKEY_H_
 
 #include "IntArrBuild.h"
+#include "Log.h"
 
 class myKey : intArrBuild
 {
@@ -27,6 +28,7 @@ public:
 private:
 	char* input_key;
 	int sec_arr[6] = { 15,10,13,16,11,10 };
+	Log log_t;
 };
 
 myKey::myKey():input_key(NULL)
@@ -56,10 +58,12 @@ void myKey::set_key()
 		if (intArrBuild::getLength(input_key) <= 5)
 		{
 			cout << "key长度过短" << endl;
+			log_t.writeLog("key长度过短");
 		}
 		else
 		{
 			cout << "key长度过长" << endl;
+			log_t.writeLog("key长度过长");
 		}
 	}
 }
@@ -194,6 +198,7 @@ char* myKey::readKey()
 	if (!read_file.good())
 	{
 		cout << "ERROR:文件打开失败" << endl;
+		log_t.writeLog("ERROR:文件打开失败");
 		exit(0);
 	}
 	//通过偏移序列解密key文件
