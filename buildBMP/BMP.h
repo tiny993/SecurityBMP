@@ -1,4 +1,8 @@
 #pragma once
+#ifndef BMP_H_
+#define BMP_H_
+#endif // !BMP_H_
+
 #include "headLib.h"
 #include "IntArrBuild.h"
 #include "Log.h"
@@ -15,7 +19,7 @@ public:
 				int width, int height, int biBitCount,
 				RGBQUAD *pColorTable);
 	//封装数据到图片
-	bool packgeBMP(int** RGB_arr);
+	bool packgeBMP(int** RGB_arr, int arr_length);
 	//输入图片名称，并检查输入是否合法
 	char* getFileName();
 private:
@@ -176,8 +180,17 @@ char* BMP::getFileName()
 	{
 		ret = intArrBuild::stringBuild();
 		unsigned length = intArrBuild::getLength(ret);
-		//判断后缀是否为".bmp"
-		if (length > 4 && ret[length - 4] == '.' && ret[length - 3] == 'b' && ret[length - 2] == 'm' && ret[length - 1] == 'p')
+		//判断后缀是否为".bmp"，只能出现一个"."
+		int point_count = 0;
+		for (int i = 0; i < length; i++)
+		{
+			if (ret[i] == '.')
+			{
+				point_count++;
+			}
+		}
+		if (length > 4 && ret[length - 4] == '.' && ret[length - 3] == 'b' && ret[length - 2] == 'm' 
+			&& ret[length - 1] == 'p' && point_count == 1)
 		{
 			break;
 		}
@@ -192,27 +205,46 @@ char* BMP::getFileName()
 *参数：数据像素数组
 *返回值：操作结果bool类型
 ***********************************/
-bool BMP::packgeBMP(int** RGB_arr)
+bool BMP::packgeBMP(int** RGB_arr, int arr_length)
 {
+	int word_count = 0;
 	char* readPath = getFileName();
 	if (!readBmp(readPath))
 	{
 		cout << "\n********打开文件失败，请检查是否有"<<readPath<<"文件！********\n" << endl;
 		log_t.writeLog("打开文件失败，请检查是否有输入文件！");
-		return 0;
+		return false;
 	}
 
-	//完成文件打开，以下需要读取图片数据和改变像素值
-// 	if (biBitCount == 8)
-// 	{
-// 		for (int i = 0; i < bmpHeight/2; i++)
-// 		{
-// 			for (int j = 0; j < bmpWidth/2; j++)
-// 			{
-// 
-// 			}
-// 		}
-// 	}
+	//每行像素所占的字节数（4的倍数）
+	//由于需要先除以4保证长度为4的倍数
+	//需要加上3（可为1、2、3任意数字）保证四舍五入后大小空间不会太小
+	int lineByte = (bmpWidth * biBitCount / 8 + 3) / 4 * 4;
 
-	return 1;
+	//完成文件打开，以下需要读取图片数据和改变像素值
+	//隔十行
+	for (int i = 0; i < bmpHeight; i += 10)
+	{
+		//每隔99个像素改变像素值
+		for (int j = 0; j < bmpWidth; j += 99)
+		{
+			//改变每个像素的RGB值
+			for (int k = 0; k < 3; k++)
+			{
+				*(pBmpBuf + i*lineByte + j * 3 + k) = RGB_arr[word_count][k];
+			}
+			word_count++;
+		}
+		if (word_count >= arr_length)
+		{
+			break;
+		}
+	}
+	log_t.writeLog("像素RGB值修改成功。");
+	cout << "\n********像素RGB值修改失败。********\n" << endl;
+	cout << "请输入加密后的图像名：" << endl;
+	char* bmpName = getFileName();
+	saveBmp(bmpName, pBmpBuf, bmpWidth, bmpHeight, biBitCount, pColorTable);
+	delete[]pBmpBuf;
+	return true;
 }

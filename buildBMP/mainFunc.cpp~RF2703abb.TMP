@@ -1,0 +1,14 @@
+#include "intArrBuild.h"
+#include "myKey.h"
+#include "BMP.h"
+#include "Log.h"
+
+int main(int arg, char* args[])
+{
+	int** x;
+	intArrBuild arr;
+//	x = arr.chsToRGB(arr.chsToInt(arr.CharToWchar(arr.stringBuild())));
+	int l = arr.getLength(*x);
+	cout << l;
+	return 0;
+}

@@ -140,6 +140,12 @@ int myKey::licOpeartion()
 	//更新license文件
 	else
 	{
+		cout << "发现license文件，是否更新？输入y即可更新，其他字符视作取消更新。" << endl;
+		if (getchar() != 'y' || getchar() != 'Y')
+		{
+			getchar();
+			return 0;
+		}
 		remove(".\\key.lic");
 		file.open(".\\key.lic", ios::app);
 		if (!file)

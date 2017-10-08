@@ -5,9 +5,7 @@
 
 #include "headLib.h"
 
-using namespace std;
-
-class intArrBuild 
+class intArrBuild
 {
 public:
 	intArrBuild();
@@ -18,6 +16,8 @@ public:
 	char* WcharToChar(wchar_t* wc_str); 
 	//读取用户输入字符串
 	char* stringBuild();
+	//解析用户输入字符串为二维数组
+
 	//宽字节字符串转整形字符串
 	int* chsToInt(wchar_t* chs);
 	void chsToInt(wchar_t*, int* num_buff);
@@ -26,7 +26,8 @@ public:
 	unsigned getLength(wchar_t* wc_str);
 	unsigned getLength(int* int_arr);
 	//整形数组转换为像素RGB值数组
-	int** chsToRGB(int* int_arr, int** &RGB_Arr);
+	int chsToRGB(int* int_arr, int** &RGB_Arr);
+	int chsToRGB(int* int_arr, int** &RGB_Arr, int key);
 	//释放资源
 	void release();
 
@@ -54,7 +55,7 @@ intArrBuild::~intArrBuild()
 *参数：char字符串
 *返回值：wchar_t字符串
 *********************************/
-wchar_t* intArrBuild::CharToWchar(char* c_str)
+inline wchar_t* intArrBuild::CharToWchar(char* c_str)
 {
 	int len = MultiByteToWideChar(CP_ACP, 0, c_str, strlen(c_str), NULL, 0);
 	wc_str = new wchar_t[len + 1];
@@ -68,7 +69,7 @@ wchar_t* intArrBuild::CharToWchar(char* c_str)
 *参数：wchar_t字符串
 *返回值：char字符串
 *********************************/
-char* intArrBuild::WcharToChar(wchar_t* wc_str) 
+inline char* intArrBuild::WcharToChar(wchar_t* wc_str) 
 {
 	int len = WideCharToMultiByte(CP_ACP, 0, wc_str, wcslen(wc_str), NULL, 0, NULL, NULL);
 	c_str = new char[len + 1];
@@ -80,9 +81,9 @@ char* intArrBuild::WcharToChar(wchar_t* wc_str)
 /********************************
 *功能：读取用户输入字符串
 *参数：无
-*返回值：wchar_t* 用户输入字符串
+*返回值：char* 用户输入字符串
 *********************************/
-char* intArrBuild::stringBuild() 
+inline char* intArrBuild::stringBuild() 
 {
 	char ch;
 	int count = 0;
@@ -110,7 +111,7 @@ char* intArrBuild::stringBuild()
 *返回值：整形字符串
 *		(无返回值)
 ***************************************/
-int* intArrBuild::chsToInt(wchar_t* wc_str) 
+inline int* intArrBuild::chsToInt(wchar_t* wc_str) 
 {
 	int num_buff[MAX] = {};
 	int index = 0;
@@ -121,7 +122,13 @@ int* intArrBuild::chsToInt(wchar_t* wc_str)
 	}
 	return num_buff;
 }
-void intArrBuild::chsToInt(wchar_t* wc_str, int* num_buff) 
+/**************************************
+*功能：宽字节字符串转整形字符串
+*参数：wchar_t字符串，整形数组首地址
+*返回值：无
+*【重载】
+***************************************/
+inline void intArrBuild::chsToInt(wchar_t* wc_str, int* num_buff) 
 {
 	int index = 0;
 	while (*wc_str != '\0')
@@ -135,7 +142,7 @@ void intArrBuild::chsToInt(wchar_t* wc_str, int* num_buff)
 *参数：数组首地址
 *返回值：无符号整形
 *********************************/
-unsigned intArrBuild::getLength(char* c_str)
+inline unsigned intArrBuild::getLength(char* c_str)
 {
 	unsigned ret = 0;
 	while (*c_str != '\0')
@@ -145,8 +152,14 @@ unsigned intArrBuild::getLength(char* c_str)
 	}
 	return ret;
 }
-//重载
-unsigned intArrBuild::getLength(wchar_t* wc_str)
+
+/********************************
+*功能：获取数组长度
+*参数：数组首地址
+*返回值：无符号整形
+*【重载】
+*********************************/
+inline unsigned intArrBuild::getLength(wchar_t* wc_str)
 {
 	unsigned ret = 0;
 	while (*wc_str != '\0')
@@ -156,8 +169,13 @@ unsigned intArrBuild::getLength(wchar_t* wc_str)
 	}
 	return ret;
 }
-//重载
-unsigned intArrBuild::getLength(int* int_arr)
+/********************************
+*功能：获取数组长度
+*参数：数组首地址
+*返回值：无符号整形
+*【重载】
+*********************************/
+inline unsigned intArrBuild::getLength(int* int_arr)
 {
 	unsigned ret = 0;
 	int index = 0;
@@ -174,7 +192,7 @@ unsigned intArrBuild::getLength(int* int_arr)
 *参数：无
 *返回值：无
 *********************************/
-void intArrBuild::release()
+inline void intArrBuild::release()
 {
 	if (get_str)
 	{
@@ -196,11 +214,12 @@ void intArrBuild::release()
 /********************************
 *功能：整形一维数组转换为像素RGB值二维数组
 *参数：整形一维数组,整形二维数组
-*返回值：RGB二维数组长度
+*返回值：RGB二维数组
 *********************************/
-int** intArrBuild::chsToRGB(int* int_arr, int** &RGB_Arr)
+inline int intArrBuild::chsToRGB(int* int_arr, int** &RGB_Arr)
 {
-	unsigned int_length = getLength(int_arr) + 1;
+	unsigned int_length = getLength(int_arr);
+	
 	//动态申请二维数组长度
 	RGB_Arr = (int**)malloc(sizeof(int*) * int_length);
 	RGB_Arr[0] = (int *)malloc(int_length * RGB_COUNT * sizeof(int));
@@ -208,9 +227,8 @@ int** intArrBuild::chsToRGB(int* int_arr, int** &RGB_Arr)
 	{
 		RGB_Arr[i] = RGB_Arr[i - 1] + RGB_COUNT;
 	}
-	//将秘钥(******)存入第一个像素中(** ** **)
 
-	for (unsigned i = 1; i < int_length; i++)
+	for (unsigned i = 0; i < int_length; i++)
 	{
 		//英文处理：英文字符小于127(ASCII)
 		if (*int_arr < 127)
@@ -227,13 +245,67 @@ int** intArrBuild::chsToRGB(int* int_arr, int** &RGB_Arr)
 			*int_arr /= 100;
 			int	G_int = *int_arr % 100;
 			*int_arr /= 100;
-			int R_int = *int_arr % 100;
-			*int_arr /= 100;
+			int R_int = *int_arr;
 			RGB_Arr[i][0] = R_int;
 			RGB_Arr[i][1] = G_int;
 			RGB_Arr[i][2] = B_int;
 			int_arr++;
 		}
 	}
-	return RGB_Arr;
+	return int_length;
+}
+/********************************
+*功能：整形一维数组转换为像素RGB值二维数组
+*参数：整形一维数组,整形二维数组
+*返回值：RGB二维数组
+*【重载】将秘钥写入第一个像素中
+*********************************/
+inline int intArrBuild::chsToRGB(int* int_arr, int** &RGB_Arr, int key)
+{
+	unsigned int_length = getLength(int_arr) + 1;
+
+	//动态申请二维数组长度
+	RGB_Arr = (int**)malloc(sizeof(int*) * int_length);
+	RGB_Arr[0] = (int *)malloc(int_length * RGB_COUNT * sizeof(int));
+	for (unsigned i = 1; i < int_length; i++)
+	{
+		RGB_Arr[i] = RGB_Arr[i - 1] + RGB_COUNT;
+	}
+	//将秘钥(******)存入第一个像素中(** ** **)
+	//将6位key分成3段存放于第一个像素中
+	int A_key = key % 100;
+	key /= 100;
+	int B_key = key % 100;
+	key /= 100;
+	int C_key = key;
+
+	RGB_Arr[0][0] = C_key;
+	RGB_Arr[0][1] = B_key;
+	RGB_Arr[0][2] = A_key;
+
+	for (unsigned i = 1; i < int_length; i++)
+	{
+		//英文处理：英文字符小于127(ASCII)
+		if (*int_arr < 127)
+		{
+			RGB_Arr[i][0] = *int_arr;
+			RGB_Arr[i][1] = 0;
+			RGB_Arr[i][2] = 0;
+			int_arr++;
+		}
+		//中文处理：中文字符整数长度为5位，拆分为万位，千位和百位，十位和个位
+		else
+		{
+			int B_int = *int_arr % 100;
+			*int_arr /= 100;
+			int	G_int = *int_arr % 100;
+			*int_arr /= 100;
+			int R_int = *int_arr;
+			RGB_Arr[i][0] = R_int;
+			RGB_Arr[i][1] = G_int;
+			RGB_Arr[i][2] = B_int;
+			int_arr++;
+		}
+	}
+	return int_length;
 }
